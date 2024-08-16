@@ -1,6 +1,6 @@
 # TiddlyWiki5 on FlyIO
 
-## Installation
+## Deploy
 
 - [Clone me](https://github.com/firstcontributions/first-contributions)
 
@@ -14,7 +14,19 @@ git submodule update --init --recursive
 
 - (Optional) [Install `Node`](https://nodejs.org/en)[^NIX]
 
-- Edit `fly.toml` for your domain name, region etc.
+- Create `fly.toml`
+
+```sh
+sh example.fly.toml fly.toml
+```
+
+- Run ...
+
+```sh
+fly launch --no-deploy
+```
+
+... and accept the option to **"tweak the settings before proceeding"** to edit the configuration.
 
 - Deploy
 
@@ -22,33 +34,107 @@ git submodule update --init --recursive
 fly deploy
 ```
 
+You should see -
+
+![](./images/tiddlywiki-default-startup.png)
+
+
 ---
 
-## Explore
 
-- Install `Node` dependencies
+## Create a Wiki
+
+This `TiddlyWiki` setup stores tiddlers as one file on disk per tiddler.
+
+By default, `Fly` apps do not store files so every time the app restarts all tiddlers are lost.
+
+To persist files, `Fly` recommends using either "volumes" or "object storage".
+
+In any case, let's first create a scaffold.
+
+- Create an empty scaffold
 
 ```sh
-cd TiddlyWiki5
-npm install
+npx tiddlywiki ./tiddlers --init server
 ```
+
+- Or [convert a pre-existing single `html` file to `Node`](https://talk.tiddlywiki.org/t/migration-from-single-html-file-to-node-js/3585)
+
+```sh
+tiddlywiki --load ./mywiki.html --savewikifolder ./tiddlers
+```
+
+### Volumes
+
+If we specify ...
+
+```toml
+[[mounts]]
+  source = 'tiddlywiki_data'
+  destination = '/data'
+```
+
+... in `fly.toml` then `Fly` creates a new folder `/data` **after the app has been deployed**
+
+If we want to copy our tiddlers to the app we can copy it via `sftp` ...
+
+```sh
+tar -cf tiddlers.tar tiddlers/
+fly ssh sftp shell
+put tiddlers.tar /data/tiddlers.tar
+fly ssh console
+cd /data
+tar -xf tiddlers.tar
+rm tiddlers.tar
+```
+
+`Fly` automatically backs up this volume via snapshots
+
+
+---
+
+
+## Auto-stop Server when Idle
+
+Just add ...
+
+```toml
+[http_service]
+  ...
+  auto_stop_machines = true
+  auto_start_machines = true
+```
+
+... to `fly.toml`
+
+
+---
+
+
+## Explore
 
 - Launch a server
 
 ```sh
-node ./tiddlywiki.js ./editions/empty
+npx tiddlywiki ./TiddlyWiki5/editions/empty
 ```
 
+
 ---
+
 
 ## Tutorials
 
-See [JavaScript on Fly.io](https://fly.io/docs/js/)
+- [`JavaScript` on `Fly.io`](https://fly.io/docs/js/)
+- [Add volume storage to a Fly Launch app](https://fly.io/docs/launch/volume-storage/) - to persist tiddlers on disk
+
 
 ---
 
+
 ## To Do
 
+- [x] [Persist tiddlers via `Tigris`](https://fly.io/docs/reference/tigris/)[^TIGRIS]
 - [ ] [Access via WireGuard](https://fly.io/docs/blueprints/private-applications-flycast/)
 
 ---
@@ -58,8 +144,10 @@ See [JavaScript on Fly.io](https://fly.io/docs/js/)
 [^NIX]: I use [`nix`](https://github.com/DeterminateSystems/nix-installer) ...
 
     ```sh
-    # Via flakes ...
+    # Via flakes which leverage `flake.nix` & `flake.lock` ...
     nix develop
     # ... or individually via ...
     nix-shell -p nodejs flyctl
     ```
+
+[^TIGRIS]: I need a 3rd party library to watch the filesystem & sync it with an object store. Volumes work out of the box.

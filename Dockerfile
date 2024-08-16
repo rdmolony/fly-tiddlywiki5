@@ -27,7 +27,6 @@ RUN npm install
 # Copy application code
 COPY --link TiddlyWiki5 .
 
-
 # Final stage for app image
 FROM base
 
@@ -36,4 +35,4 @@ COPY --from=build /app /app
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD node ./tiddlywiki.js ./editions/empty --listen host=0.0.0.0 port=3000 username=$TWUSER password=$TWPASS
+CMD node ./tiddlywiki.js /data/tiddlers/ --listen host=0.0.0.0 port=3000 username=$TWUSER password=$TWPASS
