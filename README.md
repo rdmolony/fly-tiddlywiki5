@@ -2,13 +2,17 @@
 
 ## Installation
 
-- [Install FlyIO](https://fly.io/docs/flyctl/install/)[^NIX]
+- [Clone me](https://github.com/firstcontributions/first-contributions)
 
-[^NIX]: I use [`nix`](https://github.com/DeterminateSystems/nix-installer) ...
+- Clone my submodules (so `TiddlyWiki5` is fetched too)
 
-    ```sh
-    nix-shell -p flyctl
-    ```
+```sh
+git submodule update --init --recursive
+```
+
+- [Install `flyctl`](https://fly.io/docs/flyctl/install/)[^NIX]
+
+- (Optional) [Install `Node`](https://nodejs.org/en)[^NIX]
 
 - Edit `fly.toml` for your domain name, region etc.
 
@@ -16,6 +20,23 @@
 
 ```sh
 fly deploy
+```
+
+---
+
+## Explore
+
+- Install `Node` dependencies
+
+```sh
+cd TiddlyWiki5
+npm install
+```
+
+- Launch a server
+
+```sh
+node ./tiddlywiki.js ./editions/empty
 ```
 
 ---
@@ -33,3 +54,12 @@ See [JavaScript on Fly.io](https://fly.io/docs/js/)
 ---
 
 ## Footnotes
+
+[^NIX]: I use [`nix`](https://github.com/DeterminateSystems/nix-installer) ...
+
+    ```sh
+    # Via flakes ...
+    nix develop
+    # ... or individually via ...
+    nix-shell -p nodejs flyctl
+    ```
