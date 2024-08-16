@@ -1,0 +1,3 @@
+[submodule "TiddlyWiki5"]
+	path = TiddlyWiki5
+	url = git@github.com:TiddlyWiki/TiddlyWiki5.git
