@@ -12,8 +12,6 @@ git submodule update --init --recursive
 
 - [Install `flyctl`](https://fly.io/docs/flyctl/install/)[^NIX]
 
-- (Optional) [Install `Node`](https://nodejs.org/en)[^NIX]
-
 - Create `fly.toml`
 
 ```sh
@@ -51,6 +49,9 @@ By default, `Fly` apps do not store files so every time the app restarts all tid
 To persist files, `Fly` recommends using either "volumes" or "object storage".
 
 In any case, let's first create a scaffold.
+
+- [Install `Node`](https://nodejs.org/en)[^NIX]
+
 
 - Create an empty scaffold
 
