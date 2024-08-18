@@ -93,6 +93,20 @@ rm tiddlers.tar
 
 ---
 
+## Authenticate
+
+Add basic authentication by creating secrets (or environment variables) on the server ...
+
+```sh
+fly secrets set TWUSER="<username>"
+fly secrets set TWPASS="<password>"
+```
+
+> [!NOTE]
+> The `Dockerfile` startup command `node tiddlywiki.js /path/to/tiddlers --listen ...` instructs the `Node` server to use the environment variables `TWUSER` & `TWPASS` as credentials. Changing either environment variable will update the credentials.
+
+---
+
 
 ## Auto-stop Server when Idle
 
