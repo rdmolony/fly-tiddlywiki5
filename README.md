@@ -1,5 +1,21 @@
 # TiddlyWiki5 on FlyIO
 
+
+- [TiddlyWiki5 on FlyIO](#tiddlywiki5-on-flyio)
+  - [Deploy](#deploy)
+  - [Create a Wiki](#create-a-wiki)
+    - [Volumes](#volumes)
+  - [Authenticate](#authenticate)
+  - [Auto-stop Server when Idle](#auto-stop-server-when-idle)
+  - [Explore](#explore)
+  - [Tutorials](#tutorials)
+  - [To Do](#to-do)
+  - [Gotchas](#gotchas)
+    - [Tiddlers not saving](#tiddlers-not-saving)
+  - [Footnotes](#footnotes)
+
+
+
 ## Deploy
 
 - [Clone me](https://github.com/firstcontributions/first-contributions)
@@ -142,6 +158,7 @@ npx tiddlywiki ./TiddlyWiki5/editions/empty --listen
 
 - [`JavaScript` on `Fly.io`](https://fly.io/docs/js/)
 - [Add volume storage to a Fly Launch app](https://fly.io/docs/launch/volume-storage/) - to persist tiddlers on disk
+- [Install a `TiddlyWiki` plugin](https://tiddlywiki.com/#Installing%20custom%20plugins%20on%20Node.js)
 
 
 ---
@@ -153,6 +170,18 @@ npx tiddlywiki ./TiddlyWiki5/editions/empty --listen
 - [ ] [Access via WireGuard](https://fly.io/docs/blueprints/private-applications-flycast/)
 
 ---
+
+
+## Gotchas
+
+### Tiddlers not saving
+
+The `tiddlyweb` & `filesystem` plugins weren't installed.  I had to `sftp` to the server & link `/data/tiddlers/tiddlywiki.info` to `/data/tiddlers/plugins/tiddlywiki/tiddlyweb` & `/data/tiddlers/plugins/tiddlywiki/filesystem` via `{ "plugins": [ "tiddlywiki/filesystem", "tiddlywiki/tiddlyweb" ] }` 
+
+
+---
+
+
 
 ## Footnotes
 
