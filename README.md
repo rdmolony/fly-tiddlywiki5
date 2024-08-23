@@ -7,7 +7,7 @@
 - Clone my submodules (so `TiddlyWiki5` is fetched too)
 
 ```sh
-git submodule update --init --recursive
+git submodule update --recursive --remote
 ```
 
 - [Install `flyctl`](https://fly.io/docs/flyctl/install/)[^NIX]
@@ -131,7 +131,7 @@ Just add ...
 - Launch a server
 
 ```sh
-npx tiddlywiki ./TiddlyWiki5/editions/empty
+npx tiddlywiki ./TiddlyWiki5/editions/empty --listen
 ```
 
 
