@@ -94,6 +94,7 @@ If we want to copy our tiddlers to the app we can ...
 ```sh
 tar -cf tiddlers.tar tiddlers/
 fly ssh sftp shell
+cd /data
 put tiddlers.tar /data/tiddlers.tar
 ```
 
@@ -114,7 +115,7 @@ rm tiddlers.tar
 
 ## Extras
 
-### Add authentication
+### Add single-user authentication
 
 Create secrets (or environment variables) on the server ...
 
@@ -125,6 +126,39 @@ fly secrets set TWPASS="<password>"
 
 > [!NOTE]
 > The `Dockerfile` startup command `node tiddlywiki.js /path/to/tiddlers --listen ...` instructs the `Node` server to use the environment variables `TWUSER` & `TWPASS` as credentials. Changing either environment variable will update the credentials.
+
+### Add multi-user authentication
+
+Create your credentials in `creds.csv` ...
+
+```csv
+username,password
+user,pass
+```
+
+... and copy them to the app via `sftp` ...
+
+```sh
+fly ssh sftp shell
+cd /data
+put creds.csv creds.csv
+```
+
+Instuct `TiddlyWiki` to use your credentials file by replacing the last line of the `Dockerfile` with ...
+
+```Dockerfile
+CMD npx tiddlywiki /data/tiddlers/ --listen host=0.0.0.0 port=3000 credentials=/data/creds.csv
+```
+
+Deploy
+
+```sh
+fly deploy
+```
+
+> [!NOTE]
+> If you want to change credentials you'll also have to restart the fly machine each time you do so
+
 
 ### Install plugins
 
