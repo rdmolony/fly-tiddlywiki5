@@ -22,3 +22,8 @@ sh <(curl -L https://nixos.org/nix/install)
 Via [`nix-community/nix-direnv`](https://github.com/nix-community/nix-direnv)
 
 Or just run `nix develop` on `cd`'ing to this directory
+
+
+## Deploy
+
+Check out my template at [personal](./personal/README.md)
