@@ -3,13 +3,13 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = '<app-name>'
+app = 'myapp'
 primary_region = 'lhr'
 
 [build]
 
 [[mounts]]
-  source = '<volume-name>'
+  source = 'mydata'
   destination = '/data'
 
 [http_service]
