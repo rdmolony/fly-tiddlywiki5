@@ -32,6 +32,7 @@ Or just run `nix develop` on `cd`'ing to this directory
 - Configure `fly` via configuration `fly.toml`
 
 ```sh
+cd personal
 cp example.fly.toml fly.toml
 ```
 
