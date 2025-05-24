@@ -1,64 +1,48 @@
 # `fly-tiddlywiki`
 
-## Installation
+
+- [`fly-tiddlywiki`](#fly-tiddlywiki)
+  - [Install](#install)
+  - [Deploy](#deploy)
+  - [How to ...](#how-to-)
+    - [Make the Wiki Editable?](#make-the-wiki-editable)
+    - [Add single-user authentication?](#add-single-user-authentication)
+    - [Add multi-user authentication?](#add-multi-user-authentication)
+    - [Install plugins?](#install-plugins)
+    - [Auto-stop the server when idle?](#auto-stop-the-server-when-idle)
+    - [Fix Tiddlers not saving?](#fix-tiddlers-not-saving)
+    - [Launch a local server?](#launch-a-local-server)
+  - [Sources](#sources)
+
+
+## Install
 
 - [Clone me](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
 
-- Install `nix` **to install `flyctl` & `nodejs`**
-
-Via [`DeterminateSystems/nix-installer`](https://github.com/DeterminateSystems/nix-installer)
-
-Or via [the official installer]() ...
-
-```sh
-sh <(curl -L https://nixos.org/nix/install)
-```
+- [Install `nix`](https://github.com/DeterminateSystems/nix-installer) **to automatically install this environment's dependencies**
 
 > [!NOTE]
-> `DeterminateSystems/nix-installer` includes an "uninstaller"
+> `nix` relies on `flake.nix` to determine which dependencies to install
 
-- Install `direnv` **to enable automatically activating this environment**
-
-Via [`nix-community/nix-direnv`](https://github.com/nix-community/nix-direnv)
-
-Or just run `nix develop` on `cd`'ing to this directory
+- [Install `direnv`](https://github.com/nix-community/nix-direnv) **to enable automatically activating this environment**
 
 
 ---
 
 
-## Deploy a Wiki
-
-- Configure `fly` via configuration `fly.toml`
-
-```sh
-cd personal
-cp example.fly.toml fly.toml
-```
-
-- Run ...
-
-```sh
-fly launch --no-deploy
-```
-
-... and accept the option to **"tweak the settings before proceeding"** to edit the configuration & change the domain name etc.
-
-- Deploy
+## Deploy
 
 ```sh
 fly deploy
 ```
 
-You should see -
-
-![tiddlywiki-default-startup.png](./images/tiddlywiki-default-startup.png)
-
 
 ---
 
 
-## Make the Wiki Editable
+## How to ...
+
+### Make the Wiki Editable?
 
 `TiddlyWiki` on `nodejs` stores tiddlers as one file on disk per tiddler.  By default, `Fly` apps do not store files so every time the app restarts all tiddlers are lost.  To persist files, `Fly` recommends using either "volumes" or "object storage".  We're going to use "volumes" here.
 
@@ -111,12 +95,7 @@ rm tiddlers.tar
 `Fly` will automatically backs up this volume via snapshots
 
 
----
-
-
-## Extras
-
-### Add single-user authentication
+### Add single-user authentication?
 
 Create secrets (or environment variables) on the server ...
 
@@ -128,7 +107,8 @@ fly secrets set TWPASS="<password>"
 > [!NOTE]
 > The `Dockerfile` startup command `node tiddlywiki.js /path/to/tiddlers --listen ...` instructs the `Node` server to use the environment variables `TWUSER` & `TWPASS` as credentials. Changing either environment variable will update the credentials.
 
-### Add multi-user authentication
+
+### Add multi-user authentication?
 
 Create your credentials in `creds.csv` ...
 
@@ -161,13 +141,14 @@ fly deploy
 > If you want to change credentials you'll also have to restart the fly machine each time you do so
 
 
-### Install plugins
+### Install plugins?
 
 The `tiddlyweb` & `filesystem` plugins aren't installed by default in the empty wiki.
 
 I had to `sftp` to the server & link `/data/tiddlers/tiddlywiki.info` to `/data/tiddlers/plugins/tiddlywiki/tiddlyweb` & `/data/tiddlers/plugins/tiddlywiki/filesystem` via `{ "plugins": [ "tiddlywiki/filesystem", "tiddlywiki/tiddlyweb" ] }` 
 
-### Auto-stop the server when idle
+
+### Auto-stop the server when idle?
 
 Just add ...
 
@@ -184,24 +165,14 @@ Just add ...
 > Auto-stop may prevent you from connecting to the remote app via `sftp` or `ssh`, so you may have to turn this off before making these connections.
 
 
----
-
-
-## Gotchas
-
-### Tiddlers not saving
+### Fix Tiddlers not saving?
 
 The `tiddlyweb` & `filesystem` plugins aren't installed by default in the empty wiki.
 
 See [Install plugins](#install-plugins) for a guide!
 
 
----
-
-
-## Local
-
-- Launch a server
+### Launch a local server?
 
 ```sh
 npx tiddlywiki ./TiddlyWiki5/editions/empty --listen
@@ -211,7 +182,7 @@ npx tiddlywiki ./TiddlyWiki5/editions/empty --listen
 ---
 
 
-## Tutorials
+## Sources
 
 - [`JavaScript` on `Fly.io`](https://fly.io/docs/js/)
 - [Add volume storage to a Fly Launch app](https://fly.io/docs/launch/volume-storage/) - to persist tiddlers on disk

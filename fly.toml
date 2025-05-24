@@ -1,0 +1,20 @@
+app = "rowans-thoughts-and-reflections"
+primary_region = "lhr"
+
+[http_service]
+auto_start_machines = true
+auto_stop_machines = true
+force_https = true
+internal_port = 3_000
+min_machines_running = 0
+processes = [ "app" ]
+
+[[mounts]]
+auto_extend_size_increment = "1GB"
+auto_extend_size_limit = "5GB"
+auto_extend_size_threshold = 80
+destination = "/data"
+source = "rowans_data"
+
+[[vm]]
+size = "shared-cpu-1x"
