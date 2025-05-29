@@ -41,8 +41,9 @@ RUN mkdir -p /var/run/tailscale /var/cache/tailscale /var/lib/tailscale
 COPY ./start.sh /app/start.sh
 
 # Copy built application
+COPY ./start.sh /app/start.sh
 COPY --from=build /app /app
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD ["sh", "/app/start.sh"]
+CMD sh /app/start.sh
