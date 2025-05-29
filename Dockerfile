@@ -24,12 +24,25 @@ RUN apt-get update -qq && \
 COPY package-lock.json package.json ./
 RUN npm ci
 
+
 # Final stage for app image
 FROM base
+
+# Install packages needed to run tailscale
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y ca-certificates iptables \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy Tailscale binaries from the tailscale image on Docker Hub.
+COPY --from=docker.io/tailscale/tailscale:stable /usr/local/bin/tailscaled /app/tailscaled
+COPY --from=docker.io/tailscale/tailscale:stable /usr/local/bin/tailscale /app/tailscale
+RUN mkdir -p /var/run/tailscale /var/cache/tailscale /var/lib/tailscale
+
+COPY ./start.sh /app/start.sh
 
 # Copy built application
 COPY --from=build /app /app
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD npx tiddlywiki /data/tiddlers/ --listen host=0.0.0.0 port=3000 username=$TWUSER password=$TWPASS root-tiddler=$:/core/save/lazy-images
+CMD ["sh", "/app/start.sh"]
