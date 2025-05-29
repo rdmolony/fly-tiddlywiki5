@@ -28,8 +28,9 @@ RUN npm ci
 FROM base
 
 # Copy built application
+COPY ./start.sh /app/start.sh
 COPY --from=build /app /app
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD npx tiddlywiki /data/tiddlers/ --listen host=0.0.0.0 port=3000 username=$TWUSER password=$TWPASS root-tiddler=$:/core/save/lazy-images
+CMD sh /app/start.sh
